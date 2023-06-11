@@ -84,11 +84,10 @@
             $errors[] = 'You forgot to enter contact number.';
         }
         else{
-            if(filter_var($_POST['c_number'], FILTER_VALIDATE_INT) == false){
-                $errors[] = 'Enter a valid contact number.';
-            }
-            else{
-                $phone = trim($_POST['c_number']);
+            $phone = trim($_POST['c_number']);
+
+            if(!preg_match("/^(\+?6?01)[02-46-9]-*[0-9]{7}$|^(\+?6?01)[1]-*[0-9]{8}$/", $phone)){
+                    $errors[] = 'Enter a valid contact number.';
             }
         }
 
@@ -123,6 +122,19 @@
         }
 
         //validate checkbox
+        if (isset($_POST['newsletter_subscription'])) {
+            $subscription = 'yes';
+        } else {
+            $subscription = 'no';
+        }
+
+        // calculate total budget 
+        if(isset($_POST['e_budget']) && $_POST['e_pax']) {
+            $budget = $_POST['e_budget'];
+            $pax = $_POST['e_pax'];
+            $totalBudget = $budget * $pax;
+        }
+
 
         if (empty($errors)) { // If everything's OK.
 	
@@ -131,7 +143,8 @@
             require ('mysqli_connect.php'); // Connect to the db.
     
             // Make the query:
-            $q = "INSERT INTO booking (occasion, e_date, e_time, e_budget, e_pax, e_address, location, name, phone, company, email, special_req, promo_code) VALUES ('$occ', '$date', '$time', '$budget', '$pax', '$address', '$location', '$name', '$phone', '$company', '$email', '$special_req', '$promo_code')";
+            $q = "INSERT INTO booking (occasion, e_date, e_time, e_budget, e_pax, e_address, location, name, phone, company, email, special_req, promo_code, newsletter_subscription, total_budget) 
+            VALUES ('$occ', '$date', '$time', '$budget', '$pax', '$address', '$location', '$name', '$phone', '$company', '$email', '$special_req', '$promo_code', '$subscription', '$totalBudget')";
             $r = mysqli_query($dbc, $q); // Run the query.
 
             if ($r) { // If it ran OK.
@@ -140,7 +153,7 @@
                 $in = array('$occ', '$date', '$time', '$budget', '$pax', '$address', '$location', '$name', '$phone', '$company', '$email', '$special_req', '$promo_code');
                 echo' <script type="text/javascript">
                 alert("Your booking success. Thank you.");
-                location="bookingPreview.php";
+                location="index.php";
                 </script>';
     
             } else { // If it did not run OK.
@@ -171,6 +184,8 @@
             }
         } // End of if (empty($errors)) IF.
     }
+    
+    
 ?>
 <!doctype html>
     <?php
@@ -316,13 +331,13 @@
                                     <div class="col-md-12 my-3">
                                         <div class="form-group">
                                             <label for="promo">Promo Code: </label>
-                                            <input  class ="form-control" type="text" name="promo" value="<?php if(isset($_POST['promo'])) echo $_POST['promo']; ?>"/>
+                                            <input  class ="form-control" type="text" name="promo" placeholder="UNIKL2023" value="<?php if(isset($_POST['promo'])) echo $_POST['promo']; ?>"/>
                                         </div>
                                     </div>
                                     <div class="col-md-12 my-3">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                            <label class="form-check-label" for="flexCheckDefault">Subscribe to our newsletter for promotions and updates.</label>
+                                            <input class="form-check-input" type="checkbox" name="newsletter_subscription">
+                                            <label class="form-check-label">Subscribe to our newsletter for promotions and updates.</label>
                                         </div>
                                     </div>
                                     

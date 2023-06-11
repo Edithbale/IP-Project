@@ -23,8 +23,11 @@ $page_title = 'Logged Out!';
 include ('includes/header.php');
 
 // Print a customized message:
-echo "<h1>Logged Out!</h1>
-<p>You are now logged out!</p>";
+echo '<div class="container d-flex justify-content-center mt-3 pt-5">
+<div class="alert alert-success text-center" role="alert">
+	<strong>Logout Successful!</strong> You have been logged out.
+</div>
+</div>';
 
 include ('includes/footer.html');
 ?>

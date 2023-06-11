@@ -34,7 +34,7 @@ require ('mysqli_connect.php');
 		
         $errors = array(); // Initialize an error array.
 
-        //validate occassion
+        //occassion
         if (($_POST['occasion'] === 'select')){
             $errors[] = 'You forgot to select Occasion.';
         }
@@ -90,7 +90,7 @@ require ('mysqli_connect.php');
         }
 
         //submit location
-        if (($_POST['location'] === 'select')){
+        if (($_POST['location'] == 'select')){
             $errors[] = 'You forgot to select location.';
         }
         else{
@@ -109,11 +109,10 @@ require ('mysqli_connect.php');
             $errors[] = 'You forgot to enter contact number.';
         }
         else{
-            if(filter_var($_POST['c_number'], FILTER_VALIDATE_INT) == false){
-                $errors[] = 'Enter a valid contact number.';
-            }
-            else{
-                $phone = trim($_POST['c_number']);
+            $phone = trim($_POST['c_number']);
+
+            if(!preg_match("/^(\+?6?01)[02-46-9]-*[0-9]{7}$|^(\+?6?01)[1]-*[0-9]{8}$/", $phone)){
+                    $errors[] = 'Enter a valid contact number.';
             }
         }
 
@@ -148,11 +147,23 @@ require ('mysqli_connect.php');
         }
 
         //validate checkbox
+        if (isset($_POST['newsletter_subscription'])) {
+            $subscription = 'yes';
+        } else {
+            $subscription = 'no';
+        }
+
+        // calculate total budget 
+        if(isset($_POST['e_budget']) && $_POST['e_pax']) {
+            $budget = $_POST['e_budget'];
+            $pax = $_POST['e_pax'];
+            $totalBudget = $budget * $pax;
+        }
 	
 	if (empty($errors)) { // If everything's OK.
 	
 			// Make the query:
-			$q = "UPDATE booking SET occasion = '$occ', e_date = '$date', e_time = '$time', e_budget = $budget, e_pax = $pax, e_address = '$address', location = '$location', name = '$name', phone = '$phone', company = '$company', email = '$email', special_req = '$special_req', promo_code = '$promo_code' WHERE booking_id=$id LIMIT 1";
+			$q = "UPDATE booking SET occasion = '$occ', e_date = '$date', e_time = '$time', e_budget = $budget, e_pax = $pax, e_address = '$address', location = '$location', name = '$name', phone = '$phone', company = '$company', email = '$email', special_req = '$special_req', promo_code = '$promo_code', newsletter_subscription = '$subscription' WHERE booking_id=$id LIMIT 1";
 			$r = @mysqli_query ($dbc, $q);
 			if (mysqli_affected_rows($dbc) == 1) { // If it ran OK.
 
@@ -181,14 +192,15 @@ require ('mysqli_connect.php');
 // Always show the form...
 
 // Retrieve the Booking's information:
-$q = "SELECT occasion, e_date, e_time, e_budget, e_pax, e_address, location, name, phone, company, email, special_req, promo_code FROM booking WHERE booking_id=$id";		
+$q = "SELECT occasion, e_date, e_time, e_budget, e_pax, e_address, location, name, phone, company, email, special_req, promo_code, newsletter_subscription FROM booking WHERE booking_id=$id";		
 $r = @mysqli_query ($dbc, $q);
 
 if (mysqli_num_rows($r) == 1) { // Valid Booking ID, show the form.
 
 	// Get the Booking's information:
 	$row = mysqli_fetch_array ($r, MYSQLI_NUM);
-	
+
+	//var_dump($row);
 	// Create the form:
         echo '<div class="container">
         <div class=" text-center mt-5 ">
@@ -202,35 +214,40 @@ if (mysqli_num_rows($r) == 1) { // Valid Booking ID, show the form.
                     <div class = "container">
                         <form action="edit_booking.php" id="event details" role="form" method="post">    
                             <div class="controls">
-                                <div class="row">
+                                <div class="row">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
                                     <h3>Event Details</h3>
                                     <div class="col-md-12 my-3">
                                         <div class="form-group">
                                             <label for="occasion">Occasion: </label>';
                                                 
-                                                $occasion = array (
-                                                    'select' => 'Select Occasion...',
+                                                    $occasion = array (
                                                     'Birthday' => 'Birthday', 
                                                     'Party' =>'Party', 
                                                     'Banquet' =>'Banquet', 
                                                     'Weeding' =>'Weeding', 
-                                                    'Buffet' =>'Buffet'
-                                                );
+                                                    'Buffet' =>'Buffet'                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+                                                ); 
 
-                                                echo '<select class="form-select" name="occasion">'; 
+                                                echo '<select class="form-select" name="occasion">';  
                                                 foreach ($occasion as $key => $value) {
-                                                echo "<option value=\"$key\">$value</option>\n";
-                                                }
+                                                                                                                                             
+                                                    if ($key == $row[0]) {
+                                                        echo "<option value= \"$value\" selected>$value</option>\n";
+                                                        } else {
+                                                            echo "<option value= \"$value\">$value</option>\n";
+                                                    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+                                                }               
+                                                
                                                 echo '</select>'; 
                                             echo'
                                         </div>
                                     </div>
-                                </div>
+                                </div>                                                                 
                                 <div class="row my-3">
                                     <div class="col-md-6 my-3">
                                         <div class="form-group">
                                             <label for="e_date">Event Date: </label>
-                                            <input  class ="form-control" type="date" name="e_date" value="' . $row[1] . '"/>
+                                            <input  class ="form-control" type="date" name="e_date" value="' . $row['1'] . '"/>
                                         </div>
                                     </div>
                                     <div class="col-md-6 my-3">
@@ -268,14 +285,17 @@ if (mysqli_num_rows($r) == 1) { // Valid Booking ID, show the form.
                                         <div class="form-group">
                                             <label for="location">Location: </label>';
                                                 $location = array (
-                                                    'select' => 'Select Location..',
                                                     'Kuala Lumpur' => 'Kuala Lumpur',
                                                     'Selangor' => 'Selangor'
                                                 );
 
                                                 echo '<select class="form-select" name="location">';
                                                 foreach ($location as $key => $value) {
-                                                echo "<option value=\"$key\">$value</option>\n";
+                                                    if ($key == $row[6]) {
+                                                        echo "<option value= \"$value\" selected>$value</option>\n";
+                                                        } else {
+                                                            echo "<option value= \"$value\">$value</option>\n";
+                                                    }   
                                                 }
                                                 echo '</select>'; 
                                             echo'
@@ -328,10 +348,22 @@ if (mysqli_num_rows($r) == 1) { // Valid Booking ID, show the form.
                                             <input  class ="form-control" type="text" name="promo" value="' . $row[12] . '"/>
                                         </div>
                                     </div>
+                                    
                                     <div class="col-md-12 my-3">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                            <label class="form-check-label" for="flexCheckDefault">Subscribe to our newsletter for promotions and updates.</label>
+                                        <div class="form-check">';
+                                            
+
+                                            // check subscription 
+                                            if ($row[13] == "yes") {
+                                                $checked = "checked";
+                                            } else {
+                                                $checked = "";
+                                            }
+
+                                            echo '
+                                            <input class="form-check-input" type="checkbox" id="subscribe" name="newsletter_subscription" ' . $checked  .'>';
+                                            echo '
+                                            <label class="form-check-label">Subscribe to our newsletter for promotions and updates.</label>
                                         </div>
                                     </div>
                                     

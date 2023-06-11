@@ -15,21 +15,23 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link rel="stylesheet" href="aa1.css">
+    <script src="/project/includes/index.js"></script>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark shadow-sm bg-dark fixed-top">
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm bg-dark fixed-top p-2">
     <div class="container">
-        <a class="navbar-brand" href="index.php">Project.com</a>
+        <a class="navbar-brand" href="index.php">MakeBook</a>
         <button class="navbar-toggler navbar-toggler-right border-0" type="button" data-toggle="collapse" data-target="#navbar4">
             <span class="navbar-toggler-icon"></span>
         </button>
         <?php
 		// Create a login/logout link:
 		if (isset($_SESSION['user_id'])) { //successfully login
+        $first_name = $_SESSION['first_name'];
 		$user = "SELECT first_name from admin";?>
         <div class="collapse navbar-collapse" id="navbar4">
             <ul class="navbar-nav mr-auto pl-lg-4">
-                <li class="nav-item px-lg-2 active"> 
+                <li class="nav-item px-lg-2 "> 
                     <a class="nav-link" href="index.php"> 
                         Home
                     </a>
@@ -48,15 +50,16 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item float-right px-lg-2">
 					<a class="nav-link bg-dark border border-primary rounded-pill" href="logout.php">
-                        <b>LOGOUT</b>
+                        <b>Logout</b>
                     </a>
                 </li>
             </ul>
+            <h5 class="text-light bold pt-2">Login as <span class="badge text-bg-success"><?= $first_name ?></span></h5>
         </div>
         <?php } else { ?>
             <div class="collapse navbar-collapse" id="navbar4">
                 <ul class="navbar-nav mr-auto pl-lg-4">
-                    <li class="nav-item px-lg-2 active"> 
+                    <li class="nav-item px-lg-2"> 
                         <a class="nav-link" href="index.php"> 
                             Home
                         </a>
@@ -68,7 +71,12 @@
                     </li>
                     <li class="nav-item px-lg-2"> 
                         <a class="nav-link" href="login.php">
-                            Login(Admin)
+                            Admin Login
+                        </a>
+                    </li>
+                    <li class="nav-item px-lg-2"> 
+                        <a class="nav-link" href="register.php">
+                            New Admin
                         </a>
                     </li>
                 </ul>
@@ -76,6 +84,7 @@
         <?php } ?>
     </div>
 </nav>
-	        
+
+
 </body>
 </html>
