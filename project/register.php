@@ -46,16 +46,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	
 		// Register the user in the database...
 		
-		require ('../mysqli_connect.php'); // Connect to the db.
+		require ('mysqli_connect.php'); // Connect to the db.
 
 		// Make the query:
-		$q = "INSERT INTO users (first_name, last_name, email, password, registration_date) VALUES ('$fn', '$ln', '$e', SHA1('$p'), NOW() )";		
+		$q = "INSERT INTO admin (first_name, last_name, email, password, registration_date) VALUES ('$fn', '$ln', '$e', SHA1('$p'), NOW() )";		
 		$r = @mysqli_query ($dbc, $q); // Run the query.
 		if ($r) { // If it ran OK.
 
 			// Print a message:
-			echo '<h1>Thank you!</h1>
-		<p>You are now registered.</p><p><br /></p>';	
+			echo '
+				<div class="d-flex justify-content-center mt-3 pt-5">
+					<div class="alert alert-success text-center">
+						<h1>Thank you!</h1>
+						<p>You are now registered.</p>
+						<p><a href="login.php" class="btn btn-primary">Login Now!</a></p>
+					</div>
+				</div>
+			';	
 
 		} else { // If it did not run OK.
 	
@@ -87,13 +94,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 } // End of the main Submit conditional.
 ?>
-<h1>Register</h1>
-<form action="register.php" method="post">
-	<p>First Name: <input type="text" name="first_name" size="15" maxlength="20" value="<?php if (isset($_POST['first_name'])) echo $_POST['first_name']; ?>" /></p>
-	<p>Last Name: <input type="text" name="last_name" size="15" maxlength="40" value="<?php if (isset($_POST['last_name'])) echo $_POST['last_name']; ?>" /></p>
-	<p>Email Address: <input type="text" name="email" size="20" maxlength="60" value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>"  /> </p>
-	<p>Password: <input type="password" name="pass1" size="10" maxlength="20" value="<?php if (isset($_POST['pass1'])) echo $_POST['pass1']; ?>"  /></p>
-	<p>Confirm Password: <input type="password" name="pass2" size="10" maxlength="20" value="<?php if (isset($_POST['pass2'])) echo $_POST['pass2']; ?>"  /></p>
-	<p><input type="submit" name="submit" value="Register" /></p>
-</form>
+	<div class="container mt-5 pt-4">
+		<div class="row justify-content-center">
+			<div class="col-md-6">
+				<div class="card">
+				<h1 class="card-title pl-3 pt-3">Register</h1>
+					<div class="card-body">
+						<form action="register.php" method="post">
+							<div class="form-group">
+								<label for="first_name">First Name</label>
+								<input type="text" class="form-control" id="first_name" name="first_name" value="<?php if (isset($_POST['first_name'])) echo $_POST['first_name']; ?>">
+							</div>
+							<div class="form-group">
+								<label for="last_name">Last Name</label>
+								<input type="text" class="form-control" id="last_name" name="last_name" value="<?php if (isset($_POST['last_name'])) echo $_POST['last_name']; ?>">
+							</div>
+							<div class="form-group">
+								<label for="email">Email Address</label>
+								<input type="email" class="form-control" id="email" name="email" value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>">
+							</div>
+							<div class="form-group">
+								<label for="pass1">Password</label>
+								<input type="password" class="form-control" id="pass1" name="pass1">
+							</div>
+							<div class="form-group">
+								<label for="pass2">Confirm Password</label>
+								<input type="password" class="form-control" id="pass2" name="pass2">
+							</div>
+							<button type="submit" class="btn btn-primary">Register</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 <?php include ('includes/footer.html'); ?>

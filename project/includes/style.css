@@ -119,3 +119,67 @@ input, select, .input {
 	background: #FFFFFF;
 	border:1px dotted #004080;
 }
+
+
+/* admin logout*/
+
+.wrapper {
+    width: 360px;
+    padding: 40px;
+    margin: 0 auto;
+}
+
+#formContent {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+#formContent img {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 20px;
+}
+
+#login,
+#password {
+    margin-bottom: 20px;
+}
+
+#login:focus,
+#password:focus {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.underlineHover {
+    color: #007bff;
+}
+
+.underlineHover:hover {
+    text-decoration: underline;
+}
+
+.fadeIn {
+    animation: fadeIn 1s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
