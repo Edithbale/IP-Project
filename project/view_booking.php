@@ -48,21 +48,12 @@ include ('includes/header.php');
 				<thead class="table-info">
 					<tr>
 						<th scope="col">No.</th>
-						<th scope="col">Occasion</th>
-						<th scope="col">Date</th>
-						<th scope="col">Time</th>
-						<th scope="col">Address</th>
-						<th scope="col">Location</th>
+						<th scope="col">Booking ID</th>
 						<th scope="col">Name</th>
 						<th scope="col">Phone Number</th>
-						<th scope="col">Email</th>
-						<th scope="col">Special Request</th>
-						<th scope="col">Promo</th>
-						<th scope="col">Company</th>
-						<th scope="col">Subscription</th>
-						<th scope="col">Budget</th>
 						<th scope="col">Pax</th>
-						<th scope="col">Total Budget</th>
+						<th scope="col">Date</th>
+						<th scope="col">Location</th>
 						<th scope="col">Edit</th>
 						<th scope="col">Delete</th>
 					</tr>
@@ -76,21 +67,12 @@ include ('includes/header.php');
 				echo '
 					<tr>
 							<td scope="col">' . $bookingNumber . '</td>
-							<td scope="col">' . $row['occasion'] . '</td>
-							<td scope="col">' . $row['date'] . '</td>
-							<td scope="col">' . $row['e_time'] . '</td>
-							<td scope="col">' . $row['e_address'] . '</td>
-							<td scope="col">' . $row['location'] . '</td>
+							<td scope="col">' . $row['booking_id'] . '</td>
 							<td scope="col">' . $row['name'] . '</td>
 							<td scope="col">' . $row['phone'] . '</td>
-							<td scope="col">' . $row['email'] . '</td>
-							<td scope="col">' . $row['special_req'] . '</td>
-							<td scope="col">' . $row['promo_code'] . '</td>
-							<td scope="col">' . $row['company'] . '</td>
-							<td scope="col">' . $row['newsletter_subscription'] . '</td>
-							<td scope="col">' . $row['e_budget'] . '</td>
 							<td scope="col">' . $row['e_pax'] . '</td>
-							<td scope="col">' . $row['total_budget'] . '</td>
+							<td scope="col">' . $row['date'] . '</td>
+							<td scope="col">' . $row['location'] . '</td>
 							<td scope="col"><a class="btn btn-primary" href="edit_booking.php?id=' . $row['booking_id'] . '">Edit</a></td>
 							<td scope="col"><a class="btn btn-danger" href="delete_booking.php?id=' . $row['booking_id'] . '">Delete</a></td>
 					</tr>';
