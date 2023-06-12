@@ -27,7 +27,7 @@
       justify-content: center;
       align-items: center;
       width: 100%;
-      height: 720px;
+      height:750px;
       background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%), url("https://wallpaperaccess.com/full/5600357.jpg");
       background-size: cover;
       background-position: center;
